@@ -9,7 +9,7 @@
       echo 'Entering GraphQL Demo Environment'
       set -v
 
-      alias stack="\stack --nix"
+      alias stack='\stack --nix'
 
       set +v
     '';
