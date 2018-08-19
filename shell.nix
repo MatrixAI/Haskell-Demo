@@ -4,6 +4,7 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "graphql-demo";
+    src = null;
     buildInputs = [];
     shellHook = ''
       echo 'Entering GraphQL Demo Environment'
