@@ -1,6 +1,6 @@
 name:                graphql-demo
 version:             0.1.0.0
-github:              "CMCDragonkai/graphql-demo"
+github:              "MatrixAI/GraphQL-Demo"
 license:             BSD3
 author:              "CMCDragonkai"
 maintainer:          "roger.qiu@polyhack.io"
