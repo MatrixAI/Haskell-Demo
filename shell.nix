@@ -1,17 +1,27 @@
 {
-  pkgs ? import (fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/8b1cf100cd8badad6e1b6d4650b904b88aa870db.tar.gz) {}
+  pkgs ? import ./pkgs.nix,
+  haskellPath ? "ghc822"
 }:
   with pkgs;
-  haskell.lib.buildStackProject {
-    name = "graphql-demo";
-    src = null;
-    buildInputs = [];
-    shellHook = ''
-      echo 'Entering GraphQL Demo Environment'
-      set -v
+  let
+    haskellPackages = lib.getAttrFromPath (lib.splitString "." haskellPath) haskell.packages;
+    drv = (import ./default.nix { inherit pkgs haskellPath; }).env;
+  in
+    drv.overrideAttrs (attrs: {
+      src = null;
+      buildInputs = attrs.buildInputs ++ (with haskellPackages; [
+        cabal2nix
+        hpack
+        cabal-install
+      ]);
+      shellHook = attrs.shellHook + ''
+        echo 'Entering ${attrs.name}'
+        set -v
 
-      alias stack='\stack --nix'
+        cabal2nix --hpack . >./cabal.nix
+        hpack
+        cabal configure
 
-      set +v
-    '';
-  }
+        set +v
+      '';
+    })

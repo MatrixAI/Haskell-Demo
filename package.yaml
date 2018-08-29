@@ -1,23 +1,15 @@
-name:                graphql-demo
+name:                haskell-demo
 version:             0.1.0.0
-github:              "MatrixAI/GraphQL-Demo"
-license:             BSD3
+github:              "MatrixAI/Haskell-Demo"
+license:             Apache
 author:              "CMCDragonkai"
 maintainer:          "roger.qiu@polyhack.io"
-copyright:           "Copyright: (c) 2017 Roger Qiu"
+copyright:           "Copyright: (c) 2017 Matrix AI"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
-# Metadata used when publishing your package
-# synopsis:            Short description of your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on Github at <https://github.com/CMCDragonkai/graphql-demo#readme>
+description:         Please see the README on Github at <https://github.com/MatrixAI/Haskell-Demo#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -26,7 +18,7 @@ library:
   source-dirs: src
 
 executables:
-  graphql-demo-exe:
+  haskell-demo-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -34,10 +26,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - graphql-demo
+    - haskell-demo
 
 tests:
-  graphql-demo-test:
+  haskell-demo-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -45,4 +37,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - graphql-demo
+    - haskell-demo
