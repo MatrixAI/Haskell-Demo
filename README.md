@@ -17,7 +17,7 @@ This `cabal.nix` will be imported by the `default.nix` to be used as the core de
 
 Run `nix-shell`, and once you're inside, you can use:
 
-```
+```sh
 # check the GHC version
 ghc --version
 # show all the packages that is registed with GHC
@@ -36,7 +36,7 @@ It's important to read the guide for Cabal as this is information relevant to th
 
 The most important commands are:
 
-```
+```sh
 # this will launch GHCI for a given target
 cabal repl
 # this will build the executable and library and put them into ./dist
@@ -57,6 +57,6 @@ Because Haskell is a compiled language, most building tools are `nativeBuildInpu
 
 Note that if you want to create a quick and dirty `nix-shell` with GHC and a few packages, just use:
 
-```nix
-haskell.packages.ghc822.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])
+```sh
+nix-shell -p 'haskell.packages.ghc822.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
 ```
