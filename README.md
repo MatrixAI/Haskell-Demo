@@ -22,7 +22,7 @@ Run `nix-shell`, and once you're inside, you can use:
 ghc --version
 # show all the packages that is registed with GHC
 ghc-pkg list
-# launch teh repl
+# launch the repl
 ghci
 ```
 
