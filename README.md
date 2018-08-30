@@ -15,6 +15,8 @@ The above command is also executed at the beginning of the `shellHook`.
 
 This `cabal.nix` will be imported by the `default.nix` to be used as the core derivation. Unlike other `*2nix` tools, this still retains package sharing, because the generated `cabal.nix` expects the current package's dependencies to be passed down from a higher level package set.
 
+## Developing inside `nix-shell`
+
 Run `nix-shell`, and once you're inside, you can use:
 
 ```sh
@@ -49,6 +51,34 @@ cabal test
 cabal clean
 # this will install the executable into the ~/.cabal/bin
 cabal install
+```
+
+## Using the `package.yaml`
+
+Any module that is meant to be consumed as a library needs to be listed in the `exposed-modules`. Any module that is not listed there are considered to be private modules.
+
+## Using GHCi (or `cabal repl` or `stack ghci`)
+
+The `cabal repl` only works against the build targets specified in the `package.yaml`. You have to specify the target name:
+
+```sh
+# targets the library
+cabal repl haskell-demo
+# targets the executable (which depends on the library)
+cabal repl haskell-demo-exe
+# targets the tests (which depends on the library)
+cabal repl haskell-demo-test
+```
+
+However you need to understand how modules work in GHCi to use the REPL well. The documentation here explains the necessary commands: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html#what-s-really-in-scope-at-the-prompt
+
+Basically remember these:
+
+```
+:browse
+:show modules
+:show imports
+:module ModuleName
 ```
 
 ---

@@ -16,6 +16,8 @@ dependencies:
 
 library:
   source-dirs: src
+  exposed-modules:
+    - Lib
 
 executables:
   haskell-demo-exe:
