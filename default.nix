@@ -14,6 +14,7 @@
             ! (builtins.any
               (r: (builtins.match r (builtins.baseNameOf path)) != null)
               [
+                "dist"
                 "\.env"
               ])
           );
