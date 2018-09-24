@@ -7,6 +7,7 @@ This uses Nix and Cabal without Stack. This is because when using Nix, you don't
 The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`. Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
 
 ```sh
+nix-shell -p cabal2nix
 # using --hpack ensures that we always use package.yaml
 cabal2nix --hpack . >./cabal.nix
 ```
@@ -14,6 +15,8 @@ cabal2nix --hpack . >./cabal.nix
 The above command is also executed at the beginning of the `shellHook`.
 
 This `cabal.nix` will be imported by the `default.nix` to be used as the core derivation. Unlike other `*2nix` tools, this still retains package sharing, because the generated `cabal.nix` expects the current package's dependencies to be passed down from a higher level package set.
+
+If this is the first time you've ran `cabal`, then run `cabal update` to get the latest package list in `~/.cabal`.
 
 ## Developing inside `nix-shell`
 
