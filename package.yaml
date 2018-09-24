@@ -3,7 +3,7 @@ version:             0.1.0.0
 github:              "MatrixAI/Haskell-Demo"
 license:             Apache
 author:              "CMCDragonkai"
-maintainer:          "roger.qiu@polyhack.io"
+maintainer:          "roger.qiu@matrix.ai"
 copyright:           "Copyright: (c) 2017 Matrix AI"
 
 extra-source-files:
