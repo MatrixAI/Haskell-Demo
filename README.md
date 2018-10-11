@@ -60,6 +60,20 @@ cabal install
 
 Any module that is meant to be consumed as a library needs to be listed in the `exposed-modules`. Any module that is not listed there are considered to be private modules.
 
+The `package.yaml` is also where you list new Haskell packages. For example if you want to get the `algebraic-graphs` library, you basically use:
+
+```yaml
+dependencies:
+- base >= 4.7 && < 5
+- algebraic-graphs >= 0.2 && < 0.3
+```
+
+Then you use `cabal2nix` again and you re-enter the shell.
+
+Note that Haskell dependency constraints and versions when using `cabal2nix` is not determined by your `package.yaml`, but instead by the Nixpkgs hash located in `pkgs.nix`.
+
+Remember that Haskell package versions conventionally use `Major.Major.Minor.Patch`. For more information see: https://pvp.haskell.org/
+
 ## Using GHCi (or `cabal repl` or `stack ghci`)
 
 The `cabal repl` only works against the build targets specified in the `package.yaml`. You have to specify the target name:
