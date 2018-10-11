@@ -1,6 +1,6 @@
 {
   pkgs ? import ./pkgs.nix,
-  haskellPath ? "ghc822"
+  haskellPath ? "ghc843"
 }:
   with pkgs;
   let

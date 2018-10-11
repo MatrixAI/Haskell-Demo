@@ -105,5 +105,7 @@ Because Haskell is a compiled language, most building tools are `nativeBuildInpu
 Note that if you want to create a quick and dirty `nix-shell` with GHC and a few packages, just use:
 
 ```sh
-nix-shell -p 'haskell.packages.ghc822.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
+nix-shell -p 'ghc.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
+# or if you want to specify a version
+nix-shell -p 'haskell.packages.ghc843.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
 ```
