@@ -8,6 +8,7 @@ copyright:           "Copyright: (c) 2017 Matrix AI"
 
 extra-source-files:
 - README.md
+- package.yaml
 
 description:         Please see the README on Github at <https://github.com/MatrixAI/Haskell-Demo#readme>
 
