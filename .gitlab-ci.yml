@@ -1,0 +1,20 @@
+stages:
+  - build
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cabal-sandbox
+
+cabal:
+  stage: build
+  image: haskell:8.4.3
+  script:
+    - cabal update
+    - cabal sandbox init
+    - cabal install hpack
+    - cabal exec hpack
+    - cabal install --only-dependencies --enable-tests
+    - cabal configure --enable-tests
+    - cabal build
+    - cabal test
