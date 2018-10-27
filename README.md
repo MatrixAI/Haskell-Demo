@@ -18,7 +18,25 @@ This `cabal.nix` will be imported by the `default.nix` to be used as the core de
 
 If this is the first time you've ran `cabal`, then run `cabal update` to get the latest package list in `~/.cabal`.
 
-## Developing inside `nix-shell`
+## Installation
+
+If on Nix, you can install just by using:
+
+```sh
+nix-env -f ./default.nix -i
+```
+
+If you are not, then use `cabal`:
+
+```sh
+# you need to first generate the cabal file
+hpack
+cabal install
+```
+
+It installs the executable into `~/.cabal/bin`.
+
+## Developing
 
 Run `nix-shell`, and once you're inside, you can use:
 
@@ -54,6 +72,12 @@ cabal test
 cabal clean
 # this will install the executable into the ~/.cabal/bin
 cabal install
+```
+
+Once you have finished developing, you can build the package using:
+
+```sh
+nix-build
 ```
 
 ## Using the `package.yaml`
