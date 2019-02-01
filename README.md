@@ -122,6 +122,20 @@ Basically remember these:
 :module ModuleName
 ```
 
+## FFI
+
+This project also demonstrates how to use the FFI. C source files are located in `csrc`, while the C headers are in `include`.
+
+The relevant attributes of `package.yaml` are `c-sources`, `include-dirs` and `install-includes`.
+
+The `c-sources` be a list of C files that need to be compiled into objects that are linked during compilation.
+
+The `include-dirs` is a list of directories containing C headers to be included. In this case, we have only pointed to `include` because we are only using standard library headers and our own headers. But you can also point to system directories using absolute paths.
+
+The `install-includes` will ensure that these headers (relative to the include-dirs) are also exported to any downstream package that depends on this package. So they can make use of those same headers, if they were also writing their own C code.
+
+Finally you just need to write code like `FFI.hs`, and everything just works normally.
+
 ---
 
 Because Haskell is a compiled language, most building tools are `nativeBuildInputs`. However for the `shell.nix` this distinction doesn't matter, because it just puts you into an environment that has all the dependencies.
