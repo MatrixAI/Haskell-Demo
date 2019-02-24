@@ -17,8 +17,17 @@ dependencies:
 
 library:
   source-dirs: src
+  c-sources:
+    - csrc/mathematics.c
+    - csrc/algebra.c
+  include-dirs:
+    - include
+  install-includes:
+    - mathematics.h
+    - algebra.h
   exposed-modules:
     - Lib
+    - FFI
 
 executables:
   haskell-demo-exe:
