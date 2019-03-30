@@ -2,6 +2,7 @@
 
 module FFI
     ( getTime
+    , sin
     , add
     , getPi
     , getNegPi
@@ -41,4 +42,3 @@ getNegPi = realToFrac c_get_neg_pi
 foreign import ccall "neg_add" c_neg_add :: CInt -> CInt -> CInt
 negAdd :: Int -> Int -> Int
 negAdd x y = fromIntegral $ c_neg_add (toEnum x) (toEnum y)
-
