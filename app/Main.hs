@@ -6,11 +6,11 @@ import           Lib (someFunc)
 main :: IO ()
 main = do
   time <- F.getTime
-  let pi = F.getPi
+  let foreignPi = F.getPi
   let negPi = F.getNegPi
-  let sum = F.negAdd 1 2
+  let foreignSum = F.negAdd 1 2
   putStrLn $ show time
-  putStrLn $ show pi
+  putStrLn $ show foreignPi
   putStrLn $ show negPi
-  putStrLn $ show sum
+  putStrLn $ show foreignSum
   someFunc
