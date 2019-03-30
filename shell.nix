@@ -19,7 +19,7 @@
         set -v
 
         cabal2nix --hpack . >./cabal.nix
-        hpack
+        hpack --force
         cabal configure
 
         set +v
