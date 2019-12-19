@@ -4,37 +4,45 @@ This is an example Haskell project using Nix to setup a development environment.
 
 This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages. However Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the Cabal file.
 
-The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`. Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
+The first step is that we have to acquire `cabal2nix`, which we use to generate a `default.nix` file from the `package.yaml`. Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
 
 ```sh
 nix-shell -p cabal2nix
 # using --hpack ensures that we always use package.yaml
-cabal2nix --hpack . >./cabal.nix
+cabal2nix --hpack . >./default.nix
 ```
 
 The above command is also executed at the beginning of the `shellHook`.
-
-This `cabal.nix` will be imported by the `default.nix` to be used as the core derivation. Unlike other `*2nix` tools, this still retains package sharing, because the generated `cabal.nix` expects the current package's dependencies to be passed down from a higher level package set.
 
 If this is the first time you've ran `cabal`, then run `cabal update` to get the latest package list in `~/.cabal`.
 
 ## Installation
 
-If on Nix, you can install just by using:
+Building the package:
 
-```sh
-nix-env -f ./default.nix -i
+```
+nix-build -E '(import ./pkgs.nix).haskellPackages.callPackage ./default.nix {}'
 ```
 
-If you are not, then use `cabal`:
+Building the releases:
 
-```sh
-# you need to first generate the cabal file
-hpack
-cabal install
+```
+nix-build --attr application
+nix-build --attr applicationStrict
+nix-build --attr docker
 ```
 
-It installs the executable into `~/.cabal/bin`.
+Install into Nix user profile:
+
+```
+nix-env -f ./release.nix --install --attr application
+```
+
+Install into Docker:
+
+```
+docker load --input "$(nix-build ./release.nix --attr docker)"
+```
 
 ## Developing
 
@@ -53,7 +61,7 @@ The `cabal-install` package installs the `cabal` command. This command and assoc
 
 To use `cabal`, you need to generate the cabal file from the `package.yaml`. You can do this by running `hpack`. However this is also executed as part of the `shellHook`.
 
-At this point, you need to run `cabal configure`. This will create a `dist` directory that will contain any build artifacts. This is also executed as part of the `shellHook`.
+At this point, you need to run `cabal v2-configure`. This will create a `dist` directory that will contain any build artifacts. This is also executed as part of the `shellHook`.
 
 It's important to read the guide for Cabal as this is information relevant to the Haskell ecosystem: https://www.haskell.org/cabal/users-guide/developing-packages.html
 
@@ -61,17 +69,17 @@ The most important commands are:
 
 ```sh
 # this will launch GHCI for a given target
-cabal repl
+cabal v2-repl
 # this will build the executable and library and put them into ./dist
-cabal build
+cabal v2-build
 # this will run the executable (you can pass the name of the executable)
-cabal run
+cabal v2-run
 # this will run the tests
-cabal test
+cabal v2-test
 # deletes ./dist
-cabal clean
+cabal v2-clean
 # this will install the executable into the ~/.cabal/bin
-cabal install
+cabal v2-install
 ```
 
 Once you have finished developing, you can build the package using:
@@ -100,15 +108,15 @@ Remember that Haskell package versions conventionally use `Major.Major.Minor.Pat
 
 ## Using GHCi (or `cabal repl` or `stack ghci`)
 
-The `cabal repl` only works against the build targets specified in the `package.yaml`. You have to specify the target name:
+The `cabal v2-repl` only works against the build targets specified in the `package.yaml`. You have to specify the target name:
 
 ```sh
 # targets the library
-cabal repl haskell-demo
+cabal v2-repl haskell-demo
 # targets the executable (which depends on the library)
-cabal repl haskell-demo-exe
+cabal v2-repl haskell-demo-exe
 # targets the tests (which depends on the library)
-cabal repl haskell-demo-test
+cabal v2-repl haskell-demo-test
 ```
 
 However you need to understand how modules work in GHCi to use the REPL well. The documentation here explains the necessary commands: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html#what-s-really-in-scope-at-the-prompt

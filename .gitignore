@@ -1,6 +1,5 @@
 /.env
-/result
-/result-*
+/result*
 /*.cabal
 
 dist
