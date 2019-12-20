@@ -1,10 +1,18 @@
 stages:
+  - check
   - build
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .cabal/store
+
+nix-dry:
+  stage: check
+  image: nixos/nix:2.3
+  script:
+    - nix-build -v -v --dry-run ./release.nix --attr applicationStrict
+    - nix-build -v -v --dry-run ./release.nix --attr docker
 
 cabal:
   stage: build
@@ -17,3 +25,12 @@ cabal:
     - cabal v2-configure --enable-tests
     - cabal v2-build
     - cabal v2-test
+
+nix:
+  stage: build
+  image: nixos/nix:2.3
+  script:
+    - nix-build ./release.nix --attr applicationStrict
+    - nix-build ./release.nix --attr docker
+  only:
+    - master
