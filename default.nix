@@ -9,7 +9,7 @@ mkDerivation {
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [ base ];
   testHaskellDepends = [ base ];
-  preConfigure = "hpack";
+  prePatch = "hpack";
   homepage = "https://github.com/MatrixAI/Haskell-Demo#readme";
   license = stdenv.lib.licenses.asl20;
 }
