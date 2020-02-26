@@ -8,7 +8,7 @@ cache:
 
 cabal:
   stage: build
-  image: haskell:8.4.3
+  image: haskell:8.6.5
   script:
     - cabal update
     - cabal sandbox init
