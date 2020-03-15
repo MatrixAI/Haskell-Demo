@@ -4,7 +4,7 @@
 
 module Demo where
 
-import           Control.Exception.Safe        as E
+import qualified Control.Exception.Safe        as E
 import           Control.Exception.Safe         ( MonadCatch
                                                 , MonadMask
                                                 , MonadThrow
@@ -12,7 +12,7 @@ import           Control.Exception.Safe         ( MonadCatch
 import           Control.Monad.IO.Class         ( MonadIO
                                                 , liftIO
                                                 )
-import           Control.Monad.Logger          as L
+import qualified Control.Monad.Logger          as L
 import           Control.Monad.Logger           ( LoggingT
                                                 , MonadLogger
                                                 )
@@ -29,12 +29,12 @@ import           Data.Default.Class             ( Default
                                                 )
 import           Data.IP                        ( IP )
 import           Data.String                    ( fromString )
-import           Network.HTTP.Types            as HTTP
-import           Network.HTTP.Types.Header     as HTTPHeaders
+import qualified Network.HTTP.Types            as HTTP
+import qualified Network.HTTP.Types.Header     as HTTPHeaders
 import           Network.Socket                 ( PortNumber )
 import           Network.Wai                    ( Application )
-import           Network.Wai                   as Wai
-import           Network.Wai.Handler.Warp      as Warp
+import qualified Network.Wai                   as Wai
+import qualified Network.Wai.Handler.Warp      as Warp
 import           System.Environment             ( lookupEnv )
 
 
@@ -63,12 +63,12 @@ type Demo = DemoT IO
 
 runDemo :: DemoEnv -> Demo a -> IO a
 runDemo env demo = do
-  runStderrLoggingT $ runReaderT (runDemoT demo) env
+  L.runStderrLoggingT $ runReaderT (runDemoT demo) env
 
 warpApp :: Application
 warpApp req respond = E.bracket_
-  (runStderrLoggingT ($(L.logInfo) "Try IO Block"))
-  (runStderrLoggingT ($(L.logInfo) "Clean IO Block"))
+  (L.runStderrLoggingT ($(L.logInfo) "Try IO Block"))
+  (L.runStderrLoggingT ($(L.logInfo) "Clean IO Block"))
   (respond $ Wai.responseLBS HTTP.status200
                              [(HTTPHeaders.hContentType, "text/plain")]
                              "Hello from Demo!\n"
