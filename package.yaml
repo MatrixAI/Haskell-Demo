@@ -24,6 +24,7 @@ dependencies:
 - warp
 - http-types
 - data-default-class
+- text
 
 library:
   source-dirs: src
@@ -39,6 +40,7 @@ library:
     - Lib
     - FFI
     - Demo
+    - Library
 
 executables:
   haskell-demo-ffi-exe:
@@ -53,6 +55,15 @@ executables:
   haskell-demo-service-exe:
     main:                Main.hs
     source-dirs:         app/service
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo
+  haskell-demo-library-exe:
+    main:                Main.hs
+    source-dirs:         app/library
     ghc-options:
     - -threaded
     - -rtsopts

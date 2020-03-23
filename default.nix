@@ -1,6 +1,6 @@
 { mkDerivation, base, data-default-class, hpack, http-types
 , iproute, monad-logger, mtl, network, safe-exceptions, stdenv
-, transformers, wai, warp
+, text, transformers, wai, warp
 }:
 mkDerivation {
   pname = "haskell-demo";
@@ -10,16 +10,16 @@ mkDerivation {
   isExecutable = true;
   libraryHaskellDepends = [
     base data-default-class http-types iproute monad-logger mtl network
-    safe-exceptions transformers wai warp
+    safe-exceptions text transformers wai warp
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [
     base data-default-class http-types iproute monad-logger mtl network
-    safe-exceptions transformers wai warp
+    safe-exceptions text transformers wai warp
   ];
   testHaskellDepends = [
     base data-default-class http-types iproute monad-logger mtl network
-    safe-exceptions transformers wai warp
+    safe-exceptions text transformers wai warp
   ];
   prePatch = "hpack";
   homepage = "https://github.com/MatrixAI/Haskell-Demo#readme";
