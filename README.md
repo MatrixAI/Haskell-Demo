@@ -4,12 +4,14 @@ This is an example Haskell project using Nix to setup a development environment.
 
 This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages. However Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the Cabal file.
 
-The first step is that we have to acquire `cabal2nix`, which we use to generate a `default.nix` file from the `package.yaml`. Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
+The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`. Our custom `default.nix` then imports the `cabal.nix` and adds extra custom build steps like encoding environment variables.
+
+Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
 
 ```sh
 nix-shell -p cabal2nix
 # using --hpack ensures that we always use package.yaml
-cabal2nix --hpack . >./default.nix
+cabal2nix --hpack . >./cabal.nix
 ```
 
 The above command is also executed at the beginning of the `shellHook`.
@@ -88,6 +90,14 @@ Once you have finished developing, you can build the package using:
 nix-build
 ```
 
+Note that if you want to create a quick and dirty `nix-shell` with GHC and a few packages, just use:
+
+```sh
+nix-shell -p 'ghc.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
+# or if you want to specify a version
+nix-shell -p 'haskell.packages.ghc865.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
+```
+
 ## Using the `package.yaml`
 
 Any module that is meant to be consumed as a library needs to be listed in the `exposed-modules`. Any module that is not listed there are considered to be private modules.
@@ -105,6 +115,38 @@ Then you use `cabal2nix` again and you re-enter the shell.
 Note that Haskell dependency constraints and versions when using `cabal2nix` is not determined by your `package.yaml`, but instead by the Nixpkgs hash located in `pkgs.nix`.
 
 Remember that Haskell package versions conventionally use `Major.Major.Minor.Patch`. For more information see: https://pvp.haskell.org/
+
+## Non-Haskell Dependencies
+
+For non-Haskell dependencies that are CLI executables, if you want them to be made available to the build and final output, you need to add these dependencies to:
+
+```yaml
+system-build-tools:
+- hello
+```
+
+This will put it into the generated `cabal.nix` as a function parameter.
+
+To ensure that these dependency names do not conflict with Haskell dependencies with the same name, it's important to specify them when using the `callPackage`.
+
+```nix
+(haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; });
+```
+
+For non-Haskell dependencies that are compiled libraries that are expected to be linked against, you need to add these dependencies to:
+
+```yaml
+extra-libraries:
+- mnl
+```
+
+These C libraries will be made available to `nix-build` and `nix-shell`. The `cabal configure` will automatically find them and link them during compilation.
+
+However in Nixpkgs, these libraries will have different names. You should then explicitly specify them when using the `callPackage`:
+
+```nix
+haskellPackages.callPackage (import ./cabal.nix) { mnl = pkgs.libmnl; };
+```
 
 ## Using GHCi (or `cabal repl` or `stack ghci`)
 
@@ -143,15 +185,3 @@ The `include-dirs` is a list of directories containing C headers to be included.
 The `install-includes` will ensure that these headers (relative to the include-dirs) are also exported to any downstream package that depends on this package. So they can make use of those same headers, if they were also writing their own C code.
 
 Finally you just need to write code like `FFI.hs`, and everything just works normally.
-
----
-
-Because Haskell is a compiled language, most building tools are `nativeBuildInputs`. However for the `shell.nix` this distinction doesn't matter, because it just puts you into an environment that has all the dependencies.
-
-Note that if you want to create a quick and dirty `nix-shell` with GHC and a few packages, just use:
-
-```sh
-nix-shell -p 'ghc.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
-# or if you want to specify a version
-nix-shell -p 'haskell.packages.ghc843.ghcWithPackages (pkgs: [ pkgs.aeson pkgs.dlist ])'
-```
