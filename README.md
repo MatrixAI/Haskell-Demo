@@ -4,7 +4,15 @@ This is an example Haskell project using Nix to setup a development environment.
 
 This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages. However Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the Cabal file.
 
-The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`. Our custom `default.nix` then imports the `cabal.nix` and adds extra custom build steps like encoding environment variables.
+The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`.
+
+We also write a custom `default.nix` then imports the `cabal.nix` and adds extra custom build steps like encoding environment variables.
+
+Both the `cabal.nix` and `default.nix` remain as Haskell `callPackage` derivations.
+
+This means the function parameter names may conflict with non-Haskell package names.
+
+If you get a conflict, make sure to do explicit overrides when using `callPackage`.
 
 Note that the usage of `package.yaml` means we are using the [hpack format](https://github.com/sol/hpack). This format is transformed to a cabal file via the `hpack` command.
 
@@ -118,34 +126,36 @@ Remember that Haskell package versions conventionally use `Major.Major.Minor.Pat
 
 ## Non-Haskell Dependencies
 
-For non-Haskell dependencies that are CLI executables, if you want them to be made available to the build and final output, you need to add these dependencies to:
+For non-Haskell dependencies that are CLI executables, add them to:
 
 ```yaml
 system-build-tools:
 - hello
 ```
 
-This will put it into the generated `cabal.nix` as a function parameter.
+They will be available during `nix-build` and `nix-shell`.
 
-To ensure that these dependency names do not conflict with Haskell dependencies with the same name, it's important to specify them when using the `callPackage`.
+For them to be available for the output, you must use `makeWrapper`.
 
-```nix
-(haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; });
-```
-
-For non-Haskell dependencies that are compiled libraries that are expected to be linked against, you need to add these dependencies to:
+For non-Haskell dependencies that are linkable libraries, add them to:
 
 ```yaml
 extra-libraries:
 - mnl
 ```
 
-These C libraries will be made available to `nix-build` and `nix-shell`. The `cabal configure` will automatically find them and link them during compilation.
+The name of these libraries is the suffix of the C linking option `-lmnl` giving you `mnl`.
 
-However in Nixpkgs, these libraries will have different names. You should then explicitly specify them when using the `callPackage`:
+They will be will available to `nix-build` and `nix-shell`. The `cabal configure` will automatically find them and link them during compilation.
+
+Sometimes these non-Haskell dependencies have names that conflict with Haskell dependencies of the same name.
+
+To resolve this, override explicitly when using `callPackage`. This is done in both `shell.nix` and `release.nix`.
+
+For example:
 
 ```nix
-haskellPackages.callPackage (import ./cabal.nix) { mnl = pkgs.libmnl; };
+haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; mnl = pkgs.libmnl; };
 ```
 
 ## Using GHCi (or `cabal repl` or `stack ghci`)

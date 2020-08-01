@@ -3,7 +3,9 @@
 with pkgs;
 let
   haskellPackages = haskell.packages.ghc865;
-  drv = (haskellPackages.callPackage ./default.nix {}).env;
+  drv = (haskellPackages.callPackage ./default.nix {
+    hello = hello;
+  }).env;
 in
   drv.overrideAttrs (attrs: {
     src = null;

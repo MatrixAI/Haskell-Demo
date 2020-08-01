@@ -4,7 +4,9 @@ with pkgs;
 let
   haskellPackages = haskell.packages.ghc865;
   strict = drv: haskell.lib.buildStrictly drv;
-  drv = haskellPackages.callPackage ./default.nix {};
+  drv = haskellPackages.callPackage ./default.nix {
+    hello = hello;
+  };
 in
   rec {
     library = drv;
