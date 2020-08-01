@@ -1,5 +1,7 @@
 # Haskell Demo
 
+[![pipeline status](https://gitlab.com/MatrixAI/open-source/Haskell-Demo/badges/master/pipeline.svg)](https://gitlab.com/MatrixAI/open-source/Haskell-Demo/commits/master)
+
 This is an example Haskell project using Nix to setup a development environment.
 
 This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages. However Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the Cabal file.
