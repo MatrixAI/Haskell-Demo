@@ -4,7 +4,9 @@
 
 This is an example Haskell project using Nix to setup a development environment.
 
-This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages. However Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the Cabal file.
+This uses Nix and Cabal without Stack. This is because when using Nix, you don't need Stack, as Nix provides harmonious snapshots of Haskell packages.
+
+Stack users can still develop on this project, they just have to generate an appropriate `stack.yaml` from the `haskell-demo.cabal` file.
 
 The first step is that we have to acquire `cabal2nix`, which we use to generate a `cabal.nix` file from the `package.yaml`.
 
