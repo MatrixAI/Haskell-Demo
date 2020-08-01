@@ -184,6 +184,10 @@ Basically remember these:
 :module ModuleName
 ```
 
+The `cabal v2-repl target` command can be too heavy weight especially if you're modifying just 1 module in the entire codebase. And it can be problematic when you are breaking type signatures.
+
+So instead use `ghci ModuleA/ModuleB` to load up just that module and its dependencies.
+
 ## FFI
 
 This project also demonstrates how to use the FFI. C source files are located in `csrc`, while the C headers are in `include`.
