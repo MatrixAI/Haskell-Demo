@@ -16,7 +16,7 @@ in
       echo 'Entering ${attrs.name}'
       set -v
 
-      cabal2nix --hpack . >./default.nix
+      cabal2nix --hpack . >./cabal.nix
       hpack --force
       cabal v2-configure
 

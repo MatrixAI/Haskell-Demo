@@ -4,9 +4,7 @@ with pkgs;
 let
   haskellPackages = haskell.packages.ghc865;
   strict = drv: haskell.lib.buildStrictly drv;
-  drv = (haskellPackages.callPackage ./default.nix {}).overrideAttrs (attrs: {
-    src = nix-gitignore.gitignoreSource [] ./.;
-  });
+  drv = haskellPackages.callPackage ./default.nix {};
 in
   rec {
     library = drv;
