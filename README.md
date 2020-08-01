@@ -157,7 +157,7 @@ To resolve this, override explicitly when using `callPackage`. This is done in b
 For example:
 
 ```nix
-haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; mnl = pkgs.libmnl; };
+haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; mnl = pkgs.libmnl; }
 ```
 
 ## Using GHCi (or `cabal repl` or `stack ghci`)
