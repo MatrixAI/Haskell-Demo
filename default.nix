@@ -1,8 +1,12 @@
-{ pkgs ? import ./pkgs.nix }:
+{ callPackage
+, nix-gitignore
+, makeWrapper
+, hello
+, lib
+}:
 
-with pkgs;
 let
-  drv = (haskellPackages.callPackage ./cabal.nix { inherit hello; });
+  drv = (callPackage ./cabal.nix { hello = hello; });
 in
   drv.overrideAttrs (attrs: {
     src = nix-gitignore.gitignoreSource [] ./.;
