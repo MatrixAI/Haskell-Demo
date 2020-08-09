@@ -146,20 +146,24 @@ For non-Haskell dependencies that are linkable libraries, add them to:
 ```yaml
 extra-libraries:
 - mnl
+- z
 ```
 
-The name of these libraries is the suffix of the C linking option `-lmnl` giving you `mnl`.
+The name of these libraries is the suffix of the `gcc` linking option:
+
+* `-lmnl` giving you `mnl`
+* `-lz` giving you `z` for the zlib library.
 
 They will be will available to `nix-build` and `nix-shell`. The `cabal configure` will automatically find them and link them during compilation.
 
-Sometimes these non-Haskell dependencies have names that conflict with Haskell dependencies of the same name.
+These non-Haskell dependencies must be explicitly named when using `callPackage`.
 
-To resolve this, override explicitly when using `callPackage`. This is done in both `shell.nix` and `release.nix`.
+This is done in both `shell.nix` and `release.nix`.
 
 For example:
 
 ```nix
-haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; mnl = pkgs.libmnl; }
+haskellPackages.callPackage ./cabal.nix { hello = pkgs.hello; mnl = pkgs.libmnl; z = pkgs.zlib; }
 ```
 
 ## Using GHCi (or `cabal repl` or `stack ghci`)
