@@ -156,7 +156,7 @@ The name of these libraries is the suffix of the `gcc` linking option:
 
 They will be will available to `nix-build` and `nix-shell`. The `cabal configure` will automatically find them and link them during compilation.
 
-These non-Haskell dependencies must be explicitly named when using `callPackage`.
+These non-Haskell dependencies must be explicitly named when using `callPackage` so that they refer to the C libraries and not Haskell packages of the same name.
 
 This is done in both `shell.nix` and `release.nix`.
 
