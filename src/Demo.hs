@@ -6,7 +6,6 @@ module Demo where
 
 import qualified Control.Exception.Safe        as E
 import           Control.Exception.Safe         ( MonadCatch
-                                                , MonadMask
                                                 , MonadThrow
                                                 )
 import           Control.Monad.IO.Class         ( MonadIO
@@ -20,9 +19,6 @@ import           Control.Monad.Reader           ( MonadReader
                                                 , ReaderT
                                                 , ask
                                                 , runReaderT
-                                                )
-import           Control.Monad.Trans.Class      ( MonadTrans
-                                                , lift
                                                 )
 import           Data.Default.Class             ( Default
                                                 , def
@@ -65,7 +61,7 @@ runDemo :: DemoEnv -> Demo a -> IO a
 runDemo env demo = L.runStderrLoggingT $ runReaderT (runDemoT demo) env
 
 warpApp :: Application
-warpApp req respond = E.bracket_
+warpApp _req respond = E.bracket_
   (L.runStderrLoggingT ($(L.logInfo) "Try IO Block"))
   (L.runStderrLoggingT ($(L.logInfo) "Clean IO Block"))
   (respond $ Wai.responseLBS HTTP.status200
@@ -90,12 +86,12 @@ runDemoApp = do
   demoHost <- lookupEnv "DEMO_HOST"
   demoPort <- lookupEnv "DEMO_PORT"
   let defaultEnv = def :: DemoEnv
-  defaultEnv <- return $ maybe
+  defaultEnv' <- return $ maybe
     defaultEnv
     (\host -> defaultEnv { demoEnvHost = read host })
     demoHost
-  defaultEnv <- return $ maybe
-    defaultEnv
-    (\port -> defaultEnv { demoEnvPort = read port })
+  defaultEnv'' <- return $ maybe
+    defaultEnv'
+    (\port -> defaultEnv' { demoEnvPort = read port })
     demoPort
-  runDemo defaultEnv demoApp
+  runDemo defaultEnv'' demoApp
