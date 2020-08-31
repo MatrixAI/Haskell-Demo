@@ -18,3 +18,9 @@ cabal:
     - cabal configure --enable-tests
     - cabal build
     - cabal test
+
+echo:
+  stage: build
+  image: busybox:latest
+  script:
+    - echo Hello World!
