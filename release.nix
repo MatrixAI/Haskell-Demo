@@ -3,19 +3,16 @@
 with pkgs;
 let
   haskellPackages = haskell.packages.ghc865;
-  strict = drv: haskell.lib.buildStrictly drv;
   drv = haskellPackages.callPackage ./default.nix {
     hello = hello;
   };
 in
   rec {
     library = drv;
-    libraryStrict = strict drv;
     application = drv;
-    applicationStrict = strict drv;
     docker = dockerTools.buildImage {
-      name = applicationStrict.name;
-      contents = applicationStrict;
+      name = application.name;
+      contents = application;
       config = {
         Cmd = [ "/bin/haskell-demo-exe" ];
       };

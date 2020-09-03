@@ -1,17 +1,20 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module FFI
-    ( getTime
-    , sin
-    , add
-    , getPi
-    , getNegPi
-    , negAdd
-    ) where
+  ( getTime
+  , sin
+  , add
+  , getPi
+  , getNegPi
+  , negAdd
+  )
+where
 
 import           Foreign.C
-import           Foreign.Ptr (Ptr, nullPtr)
-import           Prelude     hiding (sin)
+import           Foreign.Ptr                    ( Ptr
+                                                , nullPtr
+                                                )
+import           Prelude                 hiding ( sin )
 
 -- |A pure stdlib foreign function
 foreign import ccall "sin" c_sin :: CDouble -> CDouble
