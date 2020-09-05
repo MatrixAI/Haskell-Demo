@@ -13,6 +13,8 @@ in
       cabal-install
       cabal2nix
       hpack
+      hlint
+      brittany
     ]);
     shellHook = attrs.shellHook + ''
       echo 'Entering ${attrs.name}'

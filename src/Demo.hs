@@ -62,8 +62,7 @@ newtype DemoT m a = DemoT
 type Demo = DemoT IO
 
 runDemo :: DemoEnv -> Demo a -> IO a
-runDemo env demo = do
-  L.runStderrLoggingT $ runReaderT (runDemoT demo) env
+runDemo env demo = L.runStderrLoggingT $ runReaderT (runDemoT demo) env
 
 warpApp :: Application
 warpApp req respond = E.bracket_
