@@ -66,8 +66,7 @@ runDemo env demo = L.runStderrLoggingT $ runReaderT (runDemoT demo) env
 
 warpApp :: Application
 warpApp req respond = E.bracket_
-  (L.runStderrLoggingT
-   ($(L.logInfo) "Try IO Block"))
+  (L.runStderrLoggingT ($(L.logInfo) "Try IO Block"))
   (L.runStderrLoggingT ($(L.logInfo) "Clean IO Block"))
   (respond $ Wai.responseLBS HTTP.status200
                              [(HTTPHeaders.hContentType, "text/plain")]

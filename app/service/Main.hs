@@ -1,6 +1,6 @@
 module Main where
 
-import Demo
+import           Demo
 
 main :: IO ()
 main = Demo.runDemoApp

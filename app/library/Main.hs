@@ -52,7 +52,7 @@ bar' msg = L.runFileLoggingT "/tmp/demo.log" $ do
   $(L.logInfo) $ T.pack $ "[bar'] Got user input: " ++ msg
   -- get the logging action from caller's logging context
   logAction <- L.askLoggerIO
-  out <- liftIO $ runBarWithLogger (`runLoggingT` logAction) $ preBar msg
+  out       <- liftIO $ runBarWithLogger (`runLoggingT` logAction) $ preBar msg
   liftIO $ putStrLn out
 
 -- run runFooBarT and supply a file based logging capability
