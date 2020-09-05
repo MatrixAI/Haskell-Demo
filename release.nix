@@ -14,7 +14,7 @@ in
       name = application.name;
       contents = application;
       config = {
-        Cmd = [ "/bin/haskell-demo-exe" ];
+        Cmd = [ "/bin/haskell-demo-library-exe" ];
       };
     };
   }
