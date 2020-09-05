@@ -207,3 +207,35 @@ The `include-dirs` is a list of directories containing C headers to be included.
 The `install-includes` will ensure that these headers (relative to the include-dirs) are also exported to any downstream package that depends on this package. So they can make use of those same headers, if they were also writing their own C code.
 
 Finally you just need to write code like `FFI.hs`, and everything just works normally.
+
+## Quality Assurance
+
+### Hlint
+
+Use `hlint` to lint your Haskell code which can suggest better ways of writing Haskell expressions.
+
+```sh
+hlint lint ./src ./app ./test
+```
+
+Hlint will give suggestions that aren't always relevant. In order to ignore these suggestions, they must be recorded like:
+
+```sh
+hlint lint ./src ./app ./test --default > ./.hlint.yaml
+```
+
+### Brittany
+
+Use `brittany` to automatically format your code.
+
+```sh
+find ./src ./app ./test -type f -name '*.hs' -print0 | xargs -0 -I{} sh -c 'brittany --check-mode "{}" || echo "{}"; exit 1'
+```
+
+In order to apply the formatting to each file:
+
+```sh
+brittany --write-mode inplace ./src/Demo.hs ./app/library/Main.hs
+```
+
+Then use `git diff` to find the actual difference.
