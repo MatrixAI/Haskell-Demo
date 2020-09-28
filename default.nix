@@ -2,6 +2,7 @@
 # the names here can clash with non-haskell dependencies
 # make sure to specify the names the explicitly that may be clashing
 { callPackage
+, mkDerivation
 , nix-gitignore
 , makeWrapper
 , hello
