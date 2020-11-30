@@ -239,3 +239,25 @@ brittany --write-mode inplace ./src/Demo.hs ./app/library/Main.hs
 ```
 
 Then use `git diff` to find the actual difference.
+
+## PostgreSQL Integration
+
+There is an orphaned branch [postgres](https://github.com/MatrixAI/Haskell-Demo/tree/postgres) that shows how to integrate PostgreSQL into a Haskell project.
+
+It contains a `scripts` directory that contains executable scripts that initializes and starts and runs a local database. It also contains scripts that allow migration.
+
+```
+database-clean
+database-destroy
+database-init
+database-migrate
+database-start
+database-status
+database-stop
+```
+
+We bring in `postgresql` and `flyway` as additional dependencies into `shell.nix`.
+
+Then the migration files are put into `migrations` directory.
+
+See flyway documentation and postgresql documentation for more details.
