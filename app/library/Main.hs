@@ -2,9 +2,7 @@
 
 module Main where
 
-import           Control.Monad.IO.Class         ( MonadIO
-                                                , liftIO
-                                                )
+import           Control.Monad.IO.Class         ( liftIO )
 import           Control.Monad.Logger          as L
 import qualified Data.Text                     as T
 

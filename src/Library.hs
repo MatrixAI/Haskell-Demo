@@ -4,9 +4,6 @@
 
 module Library where
 
-import           Control.Monad.IO.Class         ( MonadIO
-                                                , liftIO
-                                                )
 import           Control.Monad.Logger          as L
 import           Control.Monad.Logger           ( LoggingT
                                                 , MonadLogger
