@@ -1,0 +1,97 @@
+name:                haskell-demo
+version:             0.1.0.0
+github:              "MatrixAI/Haskell-Demo"
+license:             Apache
+author:              "CMCDragonkai"
+maintainer:          "roger.qiu@matrix.ai"
+copyright:           "Copyright: (c) 2017 Matrix AI"
+
+extra-source-files:
+- README.md
+- package.yaml
+
+description:         Please see the README on Github at <https://github.com/MatrixAI/Haskell-Demo#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- transformers
+- mtl
+- monad-logger
+- safe-exceptions
+- network
+- iproute
+- wai
+- warp
+- http-types
+- data-default-class
+- text
+- typed-process
+
+system-build-tools:
+- hello
+
+library:
+  source-dirs: src
+  c-sources:
+    - csrc/mathematics.c
+    - csrc/algebra.c
+  include-dirs:
+    - include
+  install-includes:
+    - mathematics.h
+    - algebra.h
+  exposed-modules:
+    - Lib
+    - FFI
+    - Demo
+    - Library
+    - Deps
+
+executables:
+  haskell-demo-ffi-exe:
+    main:                Main.hs
+    source-dirs:         app/ffi
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo
+  haskell-demo-service-exe:
+    main:                Main.hs
+    source-dirs:         app/service
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo
+  haskell-demo-library-exe:
+    main:                Main.hs
+    source-dirs:         app/library
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo
+  haskell-demo-deps-exe:
+    main:                Main.hs
+    source-dirs:         app/deps
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo
+
+tests:
+  haskell-demo-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-demo

@@ -1,0 +1,41 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - check
+  - build
+
+image: registry.gitlab.com/matrixai/engineering/maintenance/gitlab-runner
+
+hlint:
+  stage: check
+  script:
+    - nix-shell --run 'hlint lint ./src ./app ./test'
+
+brittany:
+  stage: check
+  script:
+    - nix-shell --run "find ./src ./app ./test -type f -name '*.hs' -print0 | xargs -0 -I{} sh -c 'brittany --check-mode \"{}\" || echo \"{}\"; exit 1'"
+
+test:
+  stage: check
+  script:
+    - nix-shell --run 'cabal v2-test'
+
+nix-dry:
+  stage: check
+  script:
+    - nix-build -v -v --dry-run ./release.nix --attr library
+    - nix-build -v -v --dry-run ./release.nix --attr application
+    - nix-build -v -v --dry-run ./release.nix --attr docker
+
+nix:
+  stage: build
+  script:
+    - >
+      nix-build ./release.nix
+      --attr library
+      --attr application
+      --attr docker
+  only:
+    - master
